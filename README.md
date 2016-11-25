@@ -1,2 +1,3 @@
 # pwn
-learn pwn
+pwn learn and train
+
