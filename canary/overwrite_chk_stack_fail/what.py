@@ -1,7 +1,7 @@
 from pwn import *
 #context.log_level = 'debug'
-#p = process('what')
-p = remote("106.75.93.227",10000)
+p = process('what')
+#p = remote("106.75.93.227",10000)
 
 p.recvuntil('name: ')
 p.sendline('A'*8)

@@ -30,8 +30,7 @@ log.info("write@libc: " + hex(write_libc))
 
 system_libc = libc.symbols['system']
 log.info("system@libc: " + hex(system_libc))
-log.info("")
-log.info("")
+
 
 # overflow point
 buflen = 136

