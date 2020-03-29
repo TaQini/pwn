@@ -21,16 +21,19 @@
         nameLink: '/',
         repo: 'TaQini/pwn',
         el: '#app',
-        maxLevel: 3,
-        coverpage: "cover.md",
-        loadNavbar: 'nav.md',
-        loadSidebar: "sidebar.md",
+        maxLevel: 4,
+        subMaxLevel: 2,
+        auto2top: true,
+        coverpage: true,
+        loadNavbar: true,
+        mergeNavbar: true,
+        loadSidebar: true,
         themeColor: '#8F5EF8',//'#956FE7',
         //alias: {'/.*/_sidebar.md': '/_sidebar.md'},
         // complete configuration parameters
         search: {
             maxAge: 86400000, // Expiration time, the default one day
-            paths: 'auto',
+            // paths: [], // or 'auto'
             placeholder: '搜索',
             noData: '找不到结果',
             // Headline depth, 1 - 6
@@ -47,27 +50,16 @@
             crossChapterText: true,
         },
         ga: 'UA-159447434-1',
-        plugins: [
-          function (hook, vm) {
-            hook.beforeEach(function (html) {
-              if (/githubusercontent\.com/.test(vm.route.file)) {
-                url = vm.route.file
-                  .replace('raw.githubusercontent.com', 'github.com')
-                  .replace(/\/master/, '/blob/master')
-              } else {
-                url = 'https://github.com/TaQini/pwn/blob/master/docs/' + vm.route.file
-              }
-              var editHtml = '如有文章中存在错误:see_no_evil:欢迎您前来指正：[编辑地址](' + url + ')\n\n 此外，欢迎各位师傅前来交流思路:smile: :smile: :smile:\n\n----\n'
-
-              return editHtml
-                + html
-                + '\n\n----\n\n'
-                + '文章作者: [TaQini](mailto:742954809@qq.com)\n\n'
-                + '文章链接: '+url+'\n\n'
-                + '版权声明: 本博客所有文章除特别声明外，均采用[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)许可协议。\n\n转载请注明来自[TaQini](http://taqini.space)！'
-            })
-          },
-        ]
+        matomo: {
+          host: 'http://ma.taqini.space',
+          id: 1
+        },
+        darkMode: {
+          light: {
+            toggleBtnBg: '#42b983'
+          }
+        },
+        formatUpdated: '{MM}/{DD} {HH}:{mm}',
     }
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
@@ -79,12 +71,12 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
   <script src="//cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/js/click_heart.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/ga.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/matomo.min.js"></script>
   <!-- highlight -->
   <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-c.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-nasm.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-markdown.min.js"></script>
 </body>
 </html>
-
