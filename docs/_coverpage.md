@@ -1,6 +1,6 @@
 
 <center>
-<a href='/'>
+<a href='/pwn'>
 <img src="http://image.taqini.space/img/owl.png" width=128>
 </a>
 </center>
