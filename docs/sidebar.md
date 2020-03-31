@@ -6,10 +6,11 @@
 <p>Powered by docsify</p>
 </center>
 -->
-* [Home](/)
-* [Basic](/basic/)
-* [Heap](/heap/)
-* [ROP](/rop/)
-* [CTF-wp](/ctf/)
-  * [2020](/ctf/2020/)
-    * [BJDCTF 2nd (3/21-3/22)](/ctf/2020/bjd2nd/ "BJDCTF 2nd!")
+* 学习笔记
+  * [Basic](note/basic/)
+  * [Heap](note/heap/)
+  * [ROP](note/rop/)
+* CTF题解
+  * [2020-BJDCTF-2nd](ctf/BJDCTF-2nd-2020/ "BJDCTF 2nd Pwn出题人wp - 20200321/23")
+  * [2020-WUST-CTF](ctf/WUST-CTF-2020/ "WUST-CTF 萌新赛 - 20200327/30")
+
