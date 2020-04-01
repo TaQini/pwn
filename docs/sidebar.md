@@ -14,7 +14,7 @@
   * [Heap利用](note/heap/)
   * [ROP攻击](note/rop/)
 * CTF题解
-  * [Hgame-2020](ctf/Hgame-2020/ "杭电新生赛 - 202002 /14")
+  * [Hgame-2020](ctf/Hgame-2020/ "杭电新生赛 - 20200116/0214")
   * [ACTF-2020](ctf/ACTF-2020/ "中南大学新生赛 - 20200201/14")
   * [MetasequoiaCTF-2020](ctf/MetasequoiaCTF-2020/ "MetasequoiaCTF writeup - 20200220/21")
   * [2020-BJDCTF-2nd](ctf/BJDCTF-2nd-2020/ "BJDCTF 2nd Pwn出题人wp - 20200321/23")
