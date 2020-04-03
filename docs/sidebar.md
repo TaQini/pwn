@@ -13,6 +13,7 @@
     * [分析/调试](note/basic/debug.md)
   * [Heap利用](note/heap/)
   * [ROP攻击](note/rop/)
+  * [Exp模板](pwn-demo.md)
 * CTF题解
   * [Hgame-2020](ctf/Hgame-2020/ "杭电新生赛 - 20200116/0214")
   * [ACTF-2020](ctf/ACTF-2020/ "中南大学新生赛 - 20200201/14")
