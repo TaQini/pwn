@@ -117,16 +117,63 @@ def alter_qw(addr,data):
 
 > 此外，从原理上看`%100000s`,`%10000d`等类似格式也可达到同样效果。
 
+## 一次完成泄漏&修改
+### 格式符`*`
+* `%<N>d`这个很常用，打印长度为N的字符串，和`%<N>c`差不多
+
+* `%*25$d`从栈中取变量作为`N`
+
+  > 比如`25$`处的值是`0x100`，那么这个格式化字符串就相当于`%256d`
+
+?> 那么可以理解为`*`相当于c语言取值符号...嘛？
+
+刨根问底一下，查看`man`文档，找到`*`的用方法：
+
+![](http://image.taqini.space/img/20200405185627.png)
+
+根据文档写个栗子：
+
+```c
+int main(){
+    int width=10;
+    int num=2333;
+    puts("\ncase1:");
+    printf("%*d", width, num);    
+    puts("\ncase2:");
+    printf("%2$*1$d", width, num);
+}
+```
+
+运行得到如下输出：
+
+```
+case1:
+      2333
+case2:
+      2333
+```
+
+### 小结
+
+* `*`如果单独使用，则**按顺序**取参数列表中的参数
+* `*`如果配合`$`使用，则取参数列表中**相应位置**的参数，如`*1$`
+* 取出的参数将格式化为**十进制数**，用作限制**字符串宽度**
+
+### 用途
+
+* 缩短格式化字符串长度
+
 ## 练习题
 
 * [0CTF-EasiestPrintf](https://poning.me/2017/03/23/EasiestPrintf/)
-
 * [ACTF-fmt64](http://taqini.space/2020/02/13/ACTF2020-writeup/#fmt64)
-
 * [eonew-easy_printf](http://pwn.eonew.cn/) (根据Ex师傅平台的要求就不公开wp了) 
 * [ACTF-chk_rop](https://github.com/TaQini/ctf/tree/master/ACTF2020/pwn/unsolved/chk_rop) (printf_chk)
+* [MidnightSun2020-pwn4](http://taqini.space/2020/04/05/MidnightsunCTF-2020-pwn-pwn4/)(一次完成泄漏&修改)
 
-> 更新日期：2020年 04月 01日 星期三 23:05:56  CST
+> 更新日期：2020年 04月 05日 星期日 19:35:52 CST
+
+
 
 # scanf
 
