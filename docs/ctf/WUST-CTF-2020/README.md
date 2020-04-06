@@ -1210,7 +1210,7 @@ c = [156, 821, 1616, 41, 140, 2130, 1616, 793]
 m = [pow(i, d, N) for i in c]
 flag=[chr(ord('a')+i) for i in m]
 
-print 'wctf2020{%s}'%(''.join(flag))
+print ''.join(flag)
 ```
 
 > flag:  wctf2020{iloveyou}
