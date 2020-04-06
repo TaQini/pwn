@@ -67,7 +67,7 @@ In func `sub_40121A`, `maxlen` is an unsigned integer, if the return value of `s
 
 > bof is enable while `authed=1` 
 
-This elf64 program use `fgets` as input function, so only one gadget can be used beacuse of bad code `\x00` in addr of gadget. 
+This elf64 program use format string `%s` to print our input string to `ptr`(in stack) , so only one gadget can be used beacuse bad code `\x00` in address of gadget will terminal our input. 
 
 >  ROP is not a good idea.
 
