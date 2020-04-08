@@ -1,7 +1,7 @@
 # MidnightsunCTF2020
-url: [https://ctf.midnightsunctf.se/](https://ctf.midnightsunctf.se/)
-country: Sweden?
-team: TaQini@Nepnep 
+* link: [https://ctf.midnightsunctf.se/](https://ctf.midnightsunctf.se/)
+* country: Sweden
+* team: TaQini@[Nepnep](https://ctftime.org/team/106104) 
 
 ## pwn1 (70pt)
 ### Description

@@ -10,7 +10,7 @@
 
 [我的博客](//taqini.space)啦啦啦
 
-[Emoji](emoji.md)大全
+[Emoji](emoji.md)大全 & [EmojiPedia](https://emojipedia.org/)
 
 欢迎各位师傅留言、交流、换友链~ [留言板](msg-board.md)
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Pwn notebook</title>
+  <title>Pwn notebook </title>
   <link rel="icon" href="media/favicon.ico">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
@@ -11,6 +11,7 @@
   <script data-ad-client="ca-pub-3600751152886041" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
 <body>
+<!-- <body onload="twemoji.parse(document);"> -->
   <div id="app">
     <a href="http://taqini.space">
         <img src="http://image.taqini.space/img/owl.png" width=128>
@@ -65,25 +66,55 @@
         plugins: [
           function (hook, vm) {
             hook.beforeEach(function (html) {
-              if (/githubusercontent\.com/.test(vm.route.file)) {
-                url = vm.route.file
-                  .replace('raw.githubusercontent.com', 'github.com')
-                  .replace(/\/master/, '/blob/master')
-              } else {
-                url = 'https://github.com/TaQini/pwn/blob/master/docs/' + vm.route.file
-              }
-              var editHtml = '如有文章中存在错误:see_no_evil:欢迎您前来指正：[编辑地址](' + url + ')\n\n 此外，欢迎各位师傅前来交流思路:smile: :smile: :smile:\n\n----\n'
+                if (/githubusercontent\.com/.test(vm.route.file)) {
+                    url = vm.route.file
+                    .replace('raw.githubusercontent.com', 'github.com')
+                    .replace(/\/master/, '/blob/master')
+                } else {
+                    url = 'https://github.com/TaQini/pwn/blob/master/docs/' + vm.route.file
+                }
+                var editHtml = ''
+                    +'欢迎各位师傅前来交流思路:grinning:'
+                    +'如有文章中存在错误:see_no_evil:请务必指正：[:memo:编辑文章](' + url + ')'
+                    +'\n\n----\n'
+                var comment = "<div id='lv-container' data-id='city' data-uid='MTAyMC80OTM3Ny8yNTg2OQ=='></div>\n\n----\n"
+                // '<h1>评论</h1> 没有显示评论区？点击<a href="javascript:location.reload();">刷新</a>试试:D '
 
-              return editHtml
-                + html
-                + '\n\n----\n\n'
-                + '文章作者: [TaQini](mailto:742954809@qq.com)\n\n'
-                + '文章链接: '+url+'\n\n'
-                + '版权声明: 本博客所有文章除特别声明外，均采用[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)许可协议。\n\n转载请注明来自[TaQini](http://taqini.space)！'  
-                + '\n\n----\n\n'
-                + '<h3>评论</h3> 没有显示评论区？点击<a href="javascript:location.reload();">刷新</a>试试:D '
-                + "<div id='lv-container' data-id='city' data-uid='MTAyMC80OTM3Ny8yNTg2OQ=='></div>"
-            })
+                return editHtml + html;
+            });
+
+            // load livere
+            hook.beforeEach(function(content) {
+                var comment = "<div id='lv-container' data-id='city' data-uid='MTAyMC80OTM3Ny8yNTg2OQ=='></div>\n\n----\n"
+                // '<h1>评论</h1> 没有显示评论区？点击<a href="javascript:location.reload();">刷新</a>试试:D '
+                return content + comment;
+            });
+
+            hook.doneEach(function() {
+               (function(d, s) {
+                   var j, e = d.getElementsByTagName(s)[0];
+                   if (typeof LivereTower === 'function') { return; }
+                   j = d.createElement(s);
+                   j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                   j.async = true;
+                   e.parentNode.insertBefore(j, e);
+               })(document, 'script');
+            });
+
+            // add copyright
+            hook.beforeEach(function(content) {
+                var copyRight = '文章作者: [TaQini](mailto:742954809@qq.com) \n\n'+'文章链接: '+url+'\n\n'
+                    +'版权声明: 本博客所有文章除特别声明外，均采用'+
+                    '[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)许可协议。\n\n'
+                    +'转载请注明来自[TaQini](http://taqini.space)！\n'
+                return content + copyRight;
+            });
+   
+            // parse twemoji
+            hook.doneEach(function() {
+                twemoji.parse(document);
+            });
+
           },
         ]
     }
@@ -108,8 +139,10 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs/components/prism-markdown.min.js"></script>
   <!-- mouse click -->
   <script src="//cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/js/click_heart.js"></script>
+  <!-- twemoji -->
+  <script src="https://twemoji.maxcdn.com/v/12.1.5/twemoji.min.js" integrity="sha384-E4PZh8MWwKQ2W7ANni7xwx6TTuPWtd3F8mDRnaMvJssp5j+gxvP2fTsk1GnFg2gG" crossorigin="anonymous"></script>
   <div id='lv-container' data-id='city' data-uid='MTAyMC80OTM3Ny8yNTg2OQ=='></div>
-  <script type="text/javascript">
+<!--   <script type="text/javascript">
    (function(d, s) {
        var j, e = d.getElementsByTagName(s)[0];
        if (typeof LivereTower === 'function') { return; }
@@ -118,6 +151,23 @@
        j.async = true;
        e.parentNode.insertBefore(j, e);
    })(document, 'script');
+  </script> -->
+  <!-- Matomo -->
+  <script type="text/javascript">
+    var _paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["setCookieDomain", "*.taqini.space"]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//ma.taqini.space/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '1']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
   </script>
+  <!-- End Matomo Code -->
 </body>
 </html>
