@@ -3,6 +3,12 @@
 ...
 常用指令
 
+### 解决gdb遇到启动子进程后退出 
+
+```
+pwndbg> set follow-fork-mode parent
+```
+
 
 # IDA Pro
 ... 设置显示指令数量

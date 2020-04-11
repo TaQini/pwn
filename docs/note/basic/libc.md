@@ -75,6 +75,15 @@ def fmt(data,addr,off):
 
 由于每次只改1字节，使用`%hhn`快速完成任意写，不足之处就是payload太长。
 
+此外pwntools的fmtstr模块与上述函数功能相同：
+
+```python
+context.arch='amd64'
+fmt = fmtstr_payload(offset,{addr:data},write_size='byte')  # hhn
+fmt = fmtstr_payload(offset,{addr:data},write_size='short') # hn
+fmt = fmtstr_payload(offset,{addr:data},write_size='int')   # n
+```
+
 ### case2: buf不够大
 
 如果buf长度不够，可以考虑重复利用`printf`，多次攻击完成变量的修改。
