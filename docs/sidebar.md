@@ -16,7 +16,7 @@
   * [🇸🇪 2020-MidnightsunCTF](ctf/MidnightsunCTF-2020/ "MidnightsunCTF2020 - 20200404/05")
   * [🇺🇸 2020-AUCTF](ctf/AUCTF-2020/ "AUCTF2020 - 20200403/06")
   * [🇳🇴 2020-TG:Hack](ctf/TGHACK-2020/ "TG:Hack2020 - 20200411/12")
-  * [🇺🇸 2020-HackZoneVIIICTF](ctf/HackZoneVIIICTF-2020/ "HackZoneVIII - 20200412")
+  * [🇹🇳 2020-HackZoneVIIICTF](ctf/HackZoneVIIICTF-2020/ "HackZoneVIII - 20200412")
 * Notes
   * [Basic](note/basic/)
     * [libc vulns](note/basic/libc.md)
