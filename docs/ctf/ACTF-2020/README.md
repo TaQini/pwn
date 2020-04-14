@@ -1556,7 +1556,7 @@ for i in user:
 codemap = new_map
 show()
 
-print "flag{%s}"%''.join(flag)
+print flag
 ```
 
 > p.s.数独真好玩儿
@@ -1844,7 +1844,6 @@ s = ''
 for i in buf:
     # print charset.index(i)+1
     s +=  chr(charset.index(i)+1)
-s = 'ACTF{%s}'%s
 print s
 ```
 
@@ -2234,7 +2233,7 @@ __int64 __fastcall main(__int64 a1, char **a2, char **a3){
   if ( equation(&key_string) ){
     key_xor_to_int_str(&key_string, &key_string, &v4);
     // key_string 按位异或,再异或9，十进制结果转为字符串作为printf第4个参数,并没有什么用
-    __printf_chk(1LL, "Judgement pass! flag is actf{%s_%s}\n", &key_string);
+    __printf_chk(1LL, "Judgement pass! flag is actf{_%s_%s}\n", &key_string);
   }
   else{
     puts("False key!");
@@ -2330,7 +2329,7 @@ for i in d:
 	part2 ^= d[i]
 part2 = str(part2)
 
-print "actf{%s_%s}"%(part1,part2)
+print "actf{_%s_%s}"%(part1,part2)
 ```
 
 > p.s.这题其实给9个方程就可以做，因为变量必然是Ascii。
