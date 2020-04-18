@@ -7,6 +7,7 @@
 
 ```
 pwndbg> set follow-fork-mode parent
+
 ```
 
 

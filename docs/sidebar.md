@@ -21,7 +21,7 @@
   * [🇺🇸 2020-DawgCTF](ctf/DawgCTF-2020/ "DawgCTF - 20200411/13")
 * Notes
   * [Basic](note/basic/)
-    * [linux](note/basic/linux.md)
+    * [Linux OS](/note/basic/OS.md)
     * [libc vulns](note/basic/libc.md)
     * [shellcode](note/basic/shellcode.md)
     * [stack pivot](note/basic/stack_pivot.md)
