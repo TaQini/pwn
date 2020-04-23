@@ -7,12 +7,8 @@
 </center>
 -->
 * [🦉 Home](/README "Home Page")
-* 🚩 CTF-wp
-  * [:rowboat: :feet::feet::feet:](ctf/ "All CTF Writeups")
-    * [2020-writeups 🔥](ctf/2020 "2020")
-    * [2021-writeups? ](ctf/2021 "2021")
-
-* [⛱️  Notes](note/ "Notes")
+* [🚩 CTF-wp](/ctf/ "All CTF Writeups")
+* ⛱️  Notes
   * [Basic](note/basic/)
     * [Linux OS](/note/basic/OS.md)
     * [libc vulns](note/basic/libc.md)
@@ -28,4 +24,5 @@
     * [write- overwrite](note/attack/overwrite.md)
     * [exec - hijack](note/attack/hijack.md)
   * [Template](note/pwn-demo.md)
+
 

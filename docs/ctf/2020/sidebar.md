@@ -7,6 +7,7 @@
 </center>
 -->
 * [🦉 Home](/README "Go back home")
+* [ ⛱️  Notes](note/basic/ "查看笔记")
 * [:two::zero::two::zero: :feet::feet::feet:](ctf/2020/ "2020 CTF Writeups")
   * [📖 2020-Hgame](ctf/2020/Hgame-2020 "杭电新生赛 - 20200116/0214")
   * [📖 2020-ACTF](ctf/2020/ACTF-2020 "中南大学新生赛 - 20200201/14")
