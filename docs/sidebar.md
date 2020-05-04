@@ -8,7 +8,7 @@
 -->
 * [🦉 Home](/README "Home Page")
 * 🚩 CTF-wp
-  * [:rowboat: :feet::feet::feet:](ctf/ "All CTF Writeups")
+  * [🍀 🏳️‍🌈 🏳️‍🌈 🏳️‍🌈](ctf/ "All CTF Writeups")
     * [2020-writeups 🔥](ctf/2020 "2020")
     * [2021-writeups? ](ctf/2021 "2021")
 

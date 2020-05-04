@@ -7,7 +7,7 @@
 </center>
 -->
 * [🦉 Home](/README "Go back home")
-* [ ⛱️  Notes](note/basic/ "查看笔记")
+* [⛱️ Notes](note/basic/ "查看笔记")
 * [:two::zero::two::zero: :feet::feet::feet:](ctf/2020/ "2020 CTF Writeups")
   * [📖 2020-Hgame](ctf/2020/Hgame-2020 "杭电新生赛 - 20200116/0214")
   * [📖 2020-ACTF](ctf/2020/ACTF-2020 "中南大学新生赛 - 20200201/14")
@@ -24,3 +24,8 @@
   * [📖 2020-icq-HFCTF](ctf/2020/icq-HFCTF-2020 "i春秋虎符CTF - 20200419")
   * [🇺🇸 2020-UMDCTF](ctf/2020/UMDCTF-2020 "WPICTF - 20200418/19")
   * [🇺🇸 2020-WPICTF](ctf/2020/WPICTF-2020 "WPICTF - 20200418/20")
+  * [🇮🇳 2020-SARCONCTF](ctf/2020/SARCON-CTF-2020 "SARCON CTF - 20200424")
+  * [📖 2020-anheng-DASCTF](ctf/2020/DASCTF-2020 "安恒四月赛 - 20200425")
+  * [🇮🇳 2020-IJCTF](ctf/2020/IJCTF-2020 "IJCTF - 20200426")
+  * [🇺🇸 2020-HackPackCTF](/ctf/2020/HackPack-CTF-2020 "HackPackCTF - 20200428")
+  * [📖 2020-CTFShow-36d](/ctf/2020/CTFShow-36D-2020 "CTFShow 36d - 20200501/04")

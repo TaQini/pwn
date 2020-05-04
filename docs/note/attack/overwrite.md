@@ -15,3 +15,19 @@
 
 ## 劫持控制流
 
+
+## 任意写(1 byte)
+
+> Arbitrary Memory Overwrite (Write-What-Where) 
+
+数组上溢
+
+?> write backwards with negative array indexes.
+
+wpictf-nanowrite
+
+## 任意写(2 bytes)
+
+## 任意写(3 bytes)
+
+hfctf-MarksMan
