@@ -4,6 +4,7 @@
 
  * /proc/self/cwd - 当前程序路径
  * /proc/self/exe - 当前程序
+ * /proc/self/maps - 内存maps，能读的话，可以从这里泄漏基址
 
 # Buffer Mode
 ## Introduction
