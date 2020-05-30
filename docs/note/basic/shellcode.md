@@ -225,6 +225,7 @@ p.interactive()
 
 ## 字符串生成小技巧
 
+### 异化法
 > 英文写的很蹩脚，但是应该能懂...
 
 There are some techniques about generating string by ascii shellcode:
@@ -287,5 +288,17 @@ Example2: generating '`//sh`'
 | 5w1A1 | xor    eax, 0x31413177 |
 | 51X2P | xor    eax, 0x50325831 |
 | 5X118 | xor    eax, 0x38313158 |
+
+### 减法
+
+方法来源ref: [binLep师傅](http://binlep.top/2020/05/30/%e3%80%90writeup%e3%80%912020-nuaa-ctf-pwn-%e9%a2%98%e8%a7%a3/#pwn6babyshellcode)
+
+同题我的解法: [pwn6](http://taqini.space/2020/05/31/2020-NUAA-CTF-pwn6-baby-shellcode/)
+
+```python
+asm('sub byte ptr [rsi + 0x2f], dl')
+
+# '(V/'
+```
 
 
